@@ -1,0 +1,63 @@
+<section class="gl-wrap gl-bg">
+  <div class="gl-panel">
+
+    <!-- HEADER (PINNED) -->
+    <header class="gl-header">
+      <div class="gl-title">Shared Loot</div>
+      <div class="gl-actions">
+        <button type="button" class="gl-btn" data-action="addItem">
+          <i class="fa-solid fa-plus"></i> Add
+        </button>
+        {{#if isGM}}
+        <button type="button" class="gl-btn gl-danger" data-action="clearAll">
+          <i class="fa-solid fa-trash"></i> Clear
+        </button>
+        {{/if}}
+      </div>
+    </header>
+
+    <!-- SCROLLABLE LIST -->
+    <div class="gl-scroll">
+      {{#if loot.length}}
+        {{#each loot as |item|}}
+        <div class="gl-row">
+          <input class="gl-name" type="text"
+                 value="{{item.name}}"
+                 data-id="{{item.id}}"
+                 data-field="name"
+                 data-field />
+
+          <input class="gl-qty" type="number"
+                 value="{{item.qty}}"
+                 data-id="{{item.id}}"
+                 data-field="qty"
+                 data-field />
+
+          <input class="gl-notes" type="text"
+                 value="{{item.notes}}"
+                 data-id="{{item.id}}"
+                 data-field="notes"
+                 data-field />
+
+          <button class="gl-icon gl-danger"
+                  data-action="deleteItem"
+                  data-id="{{item.id}}">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        {{/each}}
+      {{else}}
+        <div class="gl-empty">No loot yet.</div>
+      {{/if}}
+    </div>
+
+    <!-- FOOTER (PINNED) -->
+    <footer class="gl-currency">
+      <label>PP <input type="number" value="{{currency.pp}}" data-denom="pp"></label>
+      <label>GP <input type="number" value="{{currency.gp}}" data-denom="gp"></label>
+      <label>SP <input type="number" value="{{currency.sp}}" data-denom="sp"></label>
+      <label>CP <input type="number" value="{{currency.cp}}" data-denom="cp"></label>
+    </footer>
+
+  </div>
+</section>

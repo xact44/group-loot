@@ -1,0 +1,231 @@
+/* App layout */
+.group-loot .gl-wrap {
+  height: 100%;
+  display: grid;
+  place-items: stretch;
+  min-height: 0; /* important */
+}
+
+.app.window-app.group-loot .window-content {
+  height: 100%;
+  padding: 0;
+  overflow: hidden; /* prevent the window itself from scrolling */
+}
+
+/* --- GIF BACKGROUND --- */
+.group-loot .gl-bg {
+  /* Put the gif in /assets/bag-bg.gif */
+  background-image: url("../assets/bag-bg.gif");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Fallback if gif fails to load */
+  background-color: #050508;
+  min-height: 0; /* important */
+  /* subtle vignette */
+  position: relative;
+  overflow: hidden;
+}
+
+.group-loot .gl-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: voidPulse 12s ease-in-out infinite;
+
+  /* Keep the center visible, crush edges */
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(0, 0, 0, 0.15) 0%,
+      rgba(0, 0, 0, 0.35) 35%,
+      rgba(0, 0, 0, 0.75) 65%,
+      rgba(0, 0, 0, 0.92) 100%
+    );
+}
+
+/* --- GLASS PANEL ON TOP --- */
+.group-loot .gl-panel {
+  position: relative; /* above ::before */
+  z-index: 1;
+
+  margin: 12px;
+  padding: 12px;
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto; /* important */
+  height: 100%;
+  min-height: 0;
+  /*flex-direction: column;*/
+  gap: 10px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(190, 150, 255, 0.14);
+
+  background: rgba(12, 10, 18, 0.78);
+  backdrop-filter: blur(10px) saturate(110%);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+
+/* Scroll area */
+.group-loot .gl-scroll {
+  overflow-y: auto;
+  min-height: 0; 
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Currency footer */
+.group-loot .gl-currency {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+
+.group-loot .gl-currency label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.75);
+}
+
+.group-loot .gl-currency input {
+  background: rgba(0,0,0,0.35);
+  color: white;
+  border-radius: 8px;
+  padding: 4px 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* Header */
+.group-loot .gl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.group-loot .gl-title {
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.2px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* Buttons */
+.group-loot .gl-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.group-loot .gl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 6px 10px;
+  border-radius: 10px;
+
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+}
+
+.group-loot .gl-btn:hover {
+  background: rgba(255,255,255,0.10);
+}
+
+.group-loot .gl-danger {
+  border-color: rgba(255, 80, 80, 0.35);
+}
+
+/* List */
+.group-loot .gl-list {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.group-loot .gl-row {
+  display: grid;
+  grid-template-columns: 1.4fr 80px 1.2fr 34px;
+  gap: 8px;
+  align-items: center;
+
+  padding: 8px;
+  border-radius: 12px;
+
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.25);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    0 4px 10px rgba(0,0,0,0.35);
+}
+
+.group-loot .gl-row:hover {
+  background: rgba(0,0,0,0.32);
+}
+
+/* Inputs (dark) */
+.group-loot input.gl-name,
+.group-loot input.gl-qty,
+.group-loot input.gl-notes {
+  width: 100%;
+  border-radius: 10px;
+  padding: 6px 8px;
+
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.35);
+  color: rgba(255,255,255,0.92);
+}
+
+.group-loot input::placeholder {
+  color: rgba(255,255,255,0.45);
+}
+
+.group-loot input:focus {
+  outline: none;
+  border-color: rgba(170, 130, 255, 0.55);
+  box-shadow: 0 0 0 3px rgba(170, 130, 255, 0.15);
+}
+
+/* Delete icon button */
+.group-loot .gl-icon {
+  width: 34px;
+  height: 32px;
+  border-radius: 10px;
+
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.9);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.group-loot .gl-icon:hover {
+  background: rgba(255,255,255,0.10);
+}
+
+.group-loot .gl-empty {
+  opacity: 0.85;
+  padding: 10px 6px;
+  color: rgba(255,255,255,0.82);
+}
+
+@keyframes voidPulse {
+  0%   { opacity: 0.92; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.92; }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "group-loot",
+  "title": "Group Loot",
+  "description": "A shared loot bag editable by players and GM.",
+  "version": "0.0.1",
+  "authors": [{ "name": "Chris Ormsby" }],
+  "compatibility": { "minimum": 13, "verified": 13 },
+  "socket": true,
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "styles": [
+    "styles/group-loot.css"
+  ]
+}
