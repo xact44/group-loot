@@ -8,10 +8,10 @@
         <button type="button" class="gl-btn" data-action="addItem">
           <i class="fa-solid fa-plus"></i> Add
         </button>
-        {{#if isGM}}
-        <button type="button" class="gl-btn gl-danger" data-action="clearAll">
-          <i class="fa-solid fa-trash"></i> Clear
-        </button>
+        {{#if isGM}} <!-- GM only buttons. Consider more in the future -->
+          <button type="button" class="gl-btn gl-danger" data-action="clearAll">
+            <i class="fa-solid fa-trash"></i> Clear
+          </button>
         {{/if}}
       </div>
     </header>
@@ -20,31 +20,14 @@
     <div class="gl-scroll">
       {{#if loot.length}}
         {{#each loot as |item|}}
-        <div class="gl-row">
-          <input class="gl-name" type="text"
-                 value="{{item.name}}"
-                 data-id="{{item.id}}"
-                 data-field="name"
-                 data-field />
-
-          <input class="gl-qty" type="number"
-                 value="{{item.qty}}"
-                 data-id="{{item.id}}"
-                 data-field="qty"
-                 data-field />
-
-          <input class="gl-notes" type="text"
-                 value="{{item.notes}}"
-                 data-id="{{item.id}}"
-                 data-field="notes"
-                 data-field />
-
-          <button class="gl-icon gl-danger"
-                  data-action="deleteItem"
-                  data-id="{{item.id}}">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
+          <div class="gl-row">
+            <input class="gl-name" type="text" value="{{item.name}}" data-id="{{item.id}}" data-field="name" data-field />
+            <input class="gl-qty" type="number" value="{{item.qty}}" data-id="{{item.id}}" data-field="qty" data-field />
+            <input class="gl-notes" type="text" value="{{item.notes}}" data-id="{{item.id}}" data-field="notes" data-field />
+            <button class="gl-icon gl-danger" data-action="deleteItem" data-id="{{item.id}}">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
         {{/each}}
       {{else}}
         <div class="gl-empty">No loot yet.</div>

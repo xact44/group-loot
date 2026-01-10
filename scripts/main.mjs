@@ -3,6 +3,7 @@ import { GroupLootApp } from "./loot-app.mjs";
 const MODULE_ID = "group-loot";
 const SETTING_KEY = "lootData";
 const SOCKET_EVENT = "applyLootPatch";
+const WINDOW_KEY = "windowState";
 
 let app;
 
@@ -129,6 +130,15 @@ Hooks.once("init", () => {
         default: []
     });
 
+        //per user window size settings
+    game.settings.register(MODULE_ID, WINDOW_KEY, {
+        name: "Group Loot Window State",
+        scope: "client",
+        config: false,
+        type: Object,
+        default: { width: 600, height: 720}
+    });
+
     //GM listens for patch requests and commits them
     game.socket.on(`module.${MODULE_ID}`, async (payload) => {
         console.log("GroupLoot | socket recv", payload, "isGM?", game.user.isGM);
@@ -150,6 +160,7 @@ Hooks.once("init", () => {
             ui.notifications?.error("Group Loot: update failed (see console).");
         }
     });
+
 });
 
 Hooks.once("ready", () => {

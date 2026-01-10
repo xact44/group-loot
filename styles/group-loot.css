@@ -12,6 +12,12 @@
   overflow: hidden; /* prevent the window itself from scrolling */
 }
 
+.app.window-app.group-loot {
+  resize: both;
+  min-width: 420px;
+  min-height: 360px;
+}
+
 /* --- GIF BACKGROUND --- */
 .group-loot .gl-bg {
   /* Put the gif in /assets/bag-bg.gif */
