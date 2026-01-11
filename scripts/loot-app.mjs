@@ -1,4 +1,5 @@
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+import { GroupLootItemDetailsApp } from "./loot-item-details.mjs";
 
 export class GroupLootApp extends HandlebarsApplicationMixin(ApplicationV2) {
   constructor({ moduleId, getLoot, requestPatch } = {}) {
@@ -13,8 +14,7 @@ export class GroupLootApp extends HandlebarsApplicationMixin(ApplicationV2) {
     this._suppressNextSave = false;
   }
 
-  static get DEFAULT_OPTIONS() {
-    return {
+  static DEFAULT_OPTIONS = {
       id: "group-loot-app",
       window: { title: "Group Loot", resizable: true },
       position: { width: 600, height: 720 },
@@ -22,9 +22,10 @@ export class GroupLootApp extends HandlebarsApplicationMixin(ApplicationV2) {
       actions: {
         addItem: GroupLootApp.addItem,
         clearAll: GroupLootApp.clearAll,
-        deleteItem: GroupLootApp.deleteItem
+        deleteItem: GroupLootApp.deleteItem,
+        openDetails: GroupLootApp.openDetails,
+        openLink: GroupLootApp.openLink
       }
-    };
   }
 
   //#region Window Resizing
@@ -107,17 +108,96 @@ export class GroupLootApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
 //#endregion
 
+  //#region Details Window
+
+  static openDetails(_event, target) {
+    const id = target?.dataset?.id;
+    if(!id) return;
+
+    const data = this.getLoot();
+    const item = data.items.find(x => x.id === id);
+    if(!item) return;
+
+    const app = new GroupLootItemDetailsApp({
+      parentApp: this,
+      itemId: id
+    });
+
+    app.render(true);
+  }
+
+  //#endregion
+
+  //#region Open Link
+
+  static openLink(_event, target) {
+    const id = target?.dataset?.id;
+    if(!id) return;
+
+    const data = this.getLoot();
+    const item = data.items.find(x => x.id === id);
+    const link = item?.extra?.link?.trim();
+
+    if(!link) {
+      ui.notifications?.warn("No link set for this item. Add one in Details.");
+      return;
+    }
+
+    let url;
+    try {
+      url = new URL(link);
+    } catch {
+      ui.notifications?.warn("Invalid URL. Add a full https(s) link in Details.");
+      return;
+    }
+
+    if(!["http:", "https:"].includes(url.protocol)) {
+      ui.notifications?.warn("Only http(s) links are allowed.");
+      return;
+    }
+
+    window.open(url.toString(), "_blank", "noopener,noreferrer");
+  }
+
+  //#endregion
+
   // Actions MUST be static; Foundry binds `this` to the app instance when calling them.
   static addItem(_event, _target) {
     console.log("ADD CLICKED");
     this.requestPatch({ op: "add", name: "New Item", qty: 1, notes: "" });
   }
 
-  static clearAll(_event, _target) {
+  static async clearAll(_event, _target) {
     if (!game.user.isGM) {
       ui.notifications?.warn("Only the GM can clear everything.");
      return;
     }
+
+    const ok = await (foundry.applications.api?.DialogV2?.confirm?.({
+      window: {title: "Clear all loot?"},
+      content: `
+        <p>This will remove <b>all</b> loot entries.</p>
+        <p><b>This cannot be undone.</b></p>
+      `,
+      yes: {label: "Clear Everything", icon: "fa-solid fa-trash"},
+      no: {label: "Cancel", icon: "fa-solid fa-xmark"},
+      defaultYes: false
+    }) ?? new Promise(resolve => {
+      //fallback for older dialog API
+      Dialog.confirm({
+        title: "Clear all loot?",
+        content: `
+          <p>This will remove <b>all</b> loot entries.</p>
+          <p><b>This cannot be undone.</b></p>
+        `,
+        yes: () => resolve(true),
+        no: () => resolve(false),
+        defaultYes: false
+      });
+    }));
+
+    if(!ok) return;
+    
     this.requestPatch({ op: "clear" });
   }
 

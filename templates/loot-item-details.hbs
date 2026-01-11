@@ -1,0 +1,32 @@
+<section class="gl-details-wrap">
+    <h3>{{item.name}}</h3>
+
+    <div class="gl-details-grid">
+        <label>
+            Rarity
+            <input type="text" value="{{item.extra.rarity}}" data-extra="rarity">
+        </label>
+
+        <label>
+            Source
+            <input type="text" value="{{item.extra.source}}" data-extra="source">
+        </label>
+
+        <label class="gl-inline">
+            <input type="checkbox" {{#if item.extra.attunement}}checked{{/if}} data-extra="attunement">
+            Requires Attunement
+        </label>
+        <p></p>
+        <label>
+            Link
+            <input type="text" value="{{item.extra.link}}" data-extra="link" placeholder="https://..."> 
+        </label>
+        {{#if isGM}}
+        <p></p>
+        <label>
+            GM Notes
+            <textarea rows="4" cols="40" data-extra="gmNotes">{{item.extra.gmNotes}}</textarea>
+        </label>
+        {{/if}}
+    </div>
+</section>
