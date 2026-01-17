@@ -63,6 +63,11 @@ async function setLoot(next) {
     return game.settings.set(MODULE_ID, SETTING_KEY, normalizeLoot(next));
 }
 
+//sort helper
+function sortItemsByName(items) {
+    items.sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", undefined, {sensitivity: "base"}));
+}
+
 //apply a "patch" describing an operation
 async function applyPatch(patch) {
     lastPatchOp = patch?.op ?? null;
@@ -86,13 +91,18 @@ async function applyPatch(patch) {
                     link: extra.link ?? ""
                 }
             });
+
+            sortItemsByName(loot.items);
             break;
         }
 
         case "update": {
             const i = loot.items.findIndex(x => x.id === patch.id);
             if(i >= 0) {
-                if (patch.name != null) loot.items[i].name = String(patch.name);
+                if (patch.name != null) {
+                    loot.items[i].name = String(patch.name); 
+                    sortItemsByName(loot.items);
+                } 
                 if (patch.qty != null) loot.items[i].qty = Number(patch.qty);
                 if (patch.notes != null) loot.items[i].notes = String(patch.notes);
             }
